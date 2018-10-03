@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SRXCalculator</title>
+   <style>
+        table{
+           /* border-collapse: collapse;*/
+           /* margin: auto auto; */ 
+        }
+        td{
+            width: 100px;
+            line-height: 70px;
+        }
+        .number{
+            width: 100px;
+            line-height: 70px;
+            font-size: large;
+            background-color: #FFCCCC;
+        } 
+        .cleaner{
+            width: 100px;
+            line-height: 70px;
+            font-size: large;
+            background-color: #FF99CC;
+        } 
+        .mode{
+            width: 100px;
+            line-height: 70px;
+            font-size: large;
+            background-color: #FFCC66;
+        } 
+        .curMode{
+            width: 100px;
+            line-height: 70px;
+            font-size: small;
+            background-color: #FFCCFF;
+        } 
+        .textField{
+            width: 400px;
+            line-height: 80px;
+            font-size: large;text-align: right;
+            background-color: #FFFFCC;
+        }
+    </style> 
+    <script>
+        window.onload = function () {
+            var array = [];//store numbers and oprs
+            var number_textField = document.getElementsByClassName("number");
+            var textField = document.getElementsByClassName("textField")[0];
+            var number_way = document.getElementsByClassName("cleaner");
+            var oprPressed=new Boolean(false);
+            for (var i = 0; i < number_way.length; i++) {
+                number_way[i].onclick = function () {
+                    if (this.value == "C") {
+                        array = [];
+                        textField.value = "";
+                    }
+                    else {
+                    	//DEL
+                        textField.value = textField.value.substr(0, textField.value.length - 1);
+                    }
+                }
+            }
+            for (var i = 0; i < number_textField.length; i++) {
+                number_textField[i].onclick = function () {
+                    if(oprPressed==true)
+                    	// have multiple operators
+                    {
+                        textField.value="";
+                        oprPressed=false;
+                    }
+                    if (textField.value == "" && this.value == ".") {
+                        textField.value = "0.";
+                    }
+                    else {
+                        if (!isNaN(this.value) || this.value == ".") {
+                        	
+                            if (textField.value.indexOf(".") != -1) {
+                            	//if already contain dot
+                                if (this.value != ".") {
+                                    textField.value += this.value;
+                                }
+                            }
+                            else {
+                                textField.value += this.value;
+                            }
+                        }
+                        else {
+                            if (this.value != "=") {
+                                oprPressed=true;
+                                array[array.length] = textField.value;
+                                if(array.length>2)
+                                {
+                                		//calculate result
+                                    textField.value = eval(array.join(""));
+                                    array = [];
+                                    array[array.length] = textField.value;
+                                }
+                                array[array.length] = this.value;
+                            }
+                            else {
+                                array[array.length] = textField.value;
+                                textField.value = eval(array.join(""));
+                                array = [];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<table>
+    <tr>
+       <td ><input class="textField" type="text" disabled/> 
+        <input class="current" type="text" hidden/></td>  
+    </tr>
+</table>
+<table>
+    <tr>
+        <td ><input class="number" type="button" value="7"/></td>
+        <td ><input class="number" type="button" value="8"/></td>
+        <td ><input class="number" type="button" value="9"/></td>
+        <td ><input class="number" type="button" value="+"/></td>
+    </tr>
+    <tr>
+        <td ><input class="number" type="button" value="4"/></td>
+        <td ><input class="number" type="button" value="5"/></td>
+        <td ><input class="number" type="button" value="6"/></td>
+        <td ><input class="number" type="button" value="-"/></td>
+    </tr>
+    <tr>
+        <td ><input class="number" type="button" value="1"/></td>
+        <td ><input class="number" type="button" value="2"/></td>
+        <td ><input class="number" type="button" value="3"/></td>
+        <td ><input class="number" type="button" value="*"/></td>
+    </tr>
+    <tr>
+        <td ><input class="number" type="button" value="0"/></td>
+        <td ><input class="number" type="button" value="."/></td>
+        <td ><input class="cleaner" type="button" value="C"/></td>
+        <td ><input class="number" type="button" value="/"/></td>
+    </tr>
+     <tr>
+        <td ><button class="mode" onclick="location.href='rpn.html'">To RPN</button></td>
+        <td ><input class="number" type="button" value="="/></td>
+        <td ><input class="cleaner"  type="button" value="DEL"/></td>
+         <td ><button class="curMode" >IN INFIX</button></td>
+    </tr>
+   
+</table>
+</body>
+</html>
